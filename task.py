@@ -1,7 +1,9 @@
 import os
 import json
 
-class MyTask:       
+class MyTask:
+    def __init__(self):
+        self.id = 0       
              
     def create_task(self, user): 
         print('\n:::: Crear tarea ::::\n')
@@ -10,9 +12,11 @@ class MyTask:
             nameTask = str(input('Nombre de la tarea: '))
             description = str(input('Descripción: '))
             completed = str(input('Completado: '))
-            
-            task = {'nombre': nameTask, 'descripcion': description, 'completado': completed }
-            
+
+            self.id += 1
+
+            task = {'nombre': nameTask, 'descripcion': description, 'completado': completed, 'id': self.id}            
+
             all_tasks = [] 
 
             if os.path.exists(f'task_{user}.json') and os.path.getsize(f'task_{user}.json') > 0:
@@ -46,21 +50,21 @@ class MyTask:
 
             print('\nTareas:\n')
             for task in task_data:
-                print(f"- {task['nombre']}")
+                print(f"- {task['nombre']} | id: {task['id']}")
 
             confirm_delete = input('\n¿Estás seguro de que deseas eliminar una tarea? (si/no): ')
 
             if confirm_delete.lower() == 'si':
-                task_to_delete = input('Nombre de la tarea a eliminar: ')
+                id_task_to_delete = int(input('ID de la tarea a eliminar: '))
 
-                updated_tasks = [task for task in task_data if task['nombre'] != task_to_delete]
+                updated_tasks = [task for task in task_data if task['id'] != id_task_to_delete]
 
                 if len(updated_tasks) == len(task_data):
-                    print(f"\nNo se encontró ninguna tarea con el nombre '{task_to_delete}'.")
+                    print(f"\nNo se encontró ninguna tarea con el ID '{id_task_to_delete}'.")
                 else:
                     with open(file_path, 'w') as file:
                         json.dump(updated_tasks, file, indent=2)
-                    print(f"\nLa tarea '{task_to_delete}' se ha eliminado con éxito.")
+                    print(f"\nLa tarea '{id_task_to_delete}' se ha eliminado con éxito.")
             else:
                 print('\nNo se eliminó ninguna tarea.')
 
@@ -80,12 +84,12 @@ class MyTask:
 
         print('\nTareas:\n')
         for name in task_data:
-            print(f'- {name["nombre"]}')
+            print(f'- {name["nombre"]} | id: {name["id"]}')
             
-        name_task_edit = input('\nNombre de la tarea a editar: ')
+        id_task_edit = int(input('\nID de la tarea a editar: '))
         print(f'\nEditando...')
         
-        if name_task_edit.lower().strip() == name["nombre"].lower():
+        if id_task_edit == name["id"]:
             name['nombre'] = input('\nNuevo nombre: ')
             name['descripcion'] = input('Nueva descripción: ')
             name['completado'] = input('¿Completado?: ')
@@ -97,7 +101,7 @@ class MyTask:
                 
             print('\nTarea editada con éxito.')
         else:
-            print(f'\nLa tarea con el nombre < {name_task_edit} >, no existe.')
+            print(f'\nLa tarea con el nombre < {id_task_edit} >, no existe.')
         
     def mark_task(self, user):
         print('\n:::: Marcar tareas ::::')
@@ -112,12 +116,12 @@ class MyTask:
             else:
                 print('\nTareas: \n')
                 for name in task_data:
-                    print(f'- {name['nombre']}')
+                    print(f'- {name['nombre']} | id: {name['id']}')
                         
-                nombre_task_mark = str(input('\nNombre de la tarea a marcar: '))
+                id_task_mark = int(input('\nID de la tarea a marcar: '))
                 
                 for i, task in enumerate(task_data, 0):
-                    if task['nombre'] == nombre_task_mark:
+                    if task['id'] == id_task_mark:
                         task['completado'] = 'Si'
                         print('\nTarea marcada con éxito.')
                         
@@ -140,12 +144,12 @@ class MyTask:
             else:
                 print('\nTareas: \n')
                 for name in task_data:
-                    print(f'- {name['nombre']}')
+                    print(f'- {name['nombre']} | id: {name['id']}')
                         
-                nombre_task_uncheck = str(input('\nNombre de la tarea a desmarcar: '))
+                id_task_uncheck = int(input('\nID de la tarea a desmarcar: '))
                 
                 for task in task_data:
-                    if task['nombre'] == nombre_task_uncheck:
+                    if task['id'] == id_task_uncheck:
                         task['completado'] = 'No'
                 
                         with open(file_search, 'w') as file:
@@ -188,16 +192,16 @@ class MyTask:
             else:
                 print('\nTareas: \n')
                 for name in task_mydata:
-                    print(f'- {name["nombre"]}')
+                    print(f'- {name["nombre"]} | id: {name["id"]} ')
                 
                 user_final = input('\nUsuario destino: ')
-                name_task_share = input('Nombre de la tarea a compartir: ')
+                id_task_share = int(input('ID de la tarea a compartir: '))
                 
                 for name in task_mydata:
-                    if name["nombre"] == name_task_share:
+                    if name["id"] == id_task_share:
                         task_final_data = []
                         
-                        task_share = {'nombre': name['nombre'], 'descripcion': name['descripcion'], 'completado': name['completado']}
+                        task_share = {'nombre': name['nombre'], 'descripcion': name['descripcion'], 'completado': name['completado'], 'id': name['id']}
                 
                         file_final = f'task_{user_final}.json'
                         if os.path.getsize(file_final) > 0:
