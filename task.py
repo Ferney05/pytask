@@ -64,7 +64,7 @@ class MyTask:
                 else:
                     with open(file_path, 'w') as file:
                         json.dump(updated_tasks, file, indent=2)
-                    print(f"\nLa tarea '{id_task_to_delete}' se ha eliminado con éxito.")
+                    print(f"\nLa tarea se ha eliminado con éxito.")
             else:
                 print('\nNo se eliminó ninguna tarea.')
 
@@ -87,21 +87,21 @@ class MyTask:
             print(f'- {name["nombre"]} | id: {name["id"]}')
             
         id_task_edit = int(input('\nID de la tarea a editar: '))
-        print(f'\nEditando...')
         
-        if id_task_edit == name["id"]:
-            name['nombre'] = input('\nNuevo nombre: ')
-            name['descripcion'] = input('Nueva descripción: ')
-            name['completado'] = input('¿Completado?: ')
-            
-            new_data = {"nombre": name['nombre'], "descripcion": name['descripcion'], 'completado': name['completado']}
-            
-            with open(file_search, 'w') as file:
-                json.dump(task_data, file, indent=2)
-                
-            print('\nTarea editada con éxito.')
+        for name in task_data:
+            if id_task_edit == name["id"]:
+                print(f'\nEditando...')
+
+                name['nombre'] = input('\nNuevo nombre: ')
+                name['descripcion'] = input('Nueva descripción: ')
+                name['completado'] = input('¿Completado?: ')
+                            
+                with open(file_search, 'w') as file:
+                    json.dump(task_data, file, indent=2)
+                    
+                print('\nTarea editada con éxito.')
         else:
-            print(f'\nLa tarea con el nombre < {id_task_edit} >, no existe.')
+            print(f'\nLa tarea con el ID <{id_task_edit}>, no existe.')
         
     def mark_task(self, user):
         print('\n:::: Marcar tareas ::::')

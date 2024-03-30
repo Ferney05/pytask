@@ -1,14 +1,1 @@
-[
-  {
-    "nombre": "Cerrar la pluma",
-    "descripcion": "Para que no vote agua",
-    "completado": "No",
-    "id": 1
-  },
-  {
-    "nombre": "Salir",
-    "descripcion": "A caminar con amigos",
-    "completado": "No",
-    "id": 2
-  }
-]
+[]
